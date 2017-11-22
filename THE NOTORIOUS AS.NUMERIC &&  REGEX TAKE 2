@@ -30,6 +30,7 @@ rankhospital<-function(state,outcome,num="best"){
   if(!is.numeric(nn)&!is.numeric(num)){
     stop("invalid num")
   }
+  nn<-num
   hs<-ds[ma[nn],"Hospital.Name"]
   hs
 }
