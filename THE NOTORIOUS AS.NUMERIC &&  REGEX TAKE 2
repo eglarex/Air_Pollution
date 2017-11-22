@@ -1,0 +1,38 @@
+rankhospital<-function(state,outcome,num="best"){
+  out<-matrix()
+  hdata<-read.csv("outcome-of-care-measures.csv",colClasses = "character")
+  spl<-read.table(text=outcome)
+  out<-vector()
+  out[1]<-paste('',spl[1,1],'',sep="")
+  out[2]<-paste('',spl[1,2],'',sep="")
+  out[3]<-"^H"
+  out[4]<-"mortality"
+  rank<-grep(out[1],names(hdata[,]),ignore.case=TRUE,value=TRUE)
+  for (i in 2:length(out)) {
+    rank<-grep(out[i],names(hdata[,rank]),ignore.case=TRUE,value=TRUE)
+  }
+  check_state<-sum(hdata[,"State"]==state)
+  if (check_state==0) {
+    stop("invalid state")
+  }
+  if (length(rank)!=1){
+    stop("invalid outcome")
+  }
+  ds<-hdata[!is.na(as.numeric(hdata[,rank]))&hdata[,"State"]==state,]
+  ma<-order(as.numeric(hdata[!is.na(as.numeric(hdata[,rank]))&hdata[,"State"]==state,rank]),hdata[!is.na(as.numeric(hdata[,rank]))&hdata[,"State"]==state,"Hospital.Name"])
+  nn<-NULL
+  if(num=="best"){
+    nn<-1
+  }
+  if(num=="worst"){
+    nn<-nrow(ds)
+  }
+  if(!is.numeric(nn)&!is.numeric(num)){
+    stop("invalid num")
+  }
+  hs<-ds[ma[nn],"Hospital.Name"]
+  hs
+}
+
+#zzz<-as.numeric(hdata[!is.na(as.numeric(hdata[,17]))&hdata[,"State"]=="TX",17])
+#ddd<-hdata[!is.na(as.numeric(hdata[,17]))&hdata[,"State"]=="TX","Hospital.Name"]
