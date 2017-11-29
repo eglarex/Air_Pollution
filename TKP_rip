@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+url.dagongbao<-"http://www.takungpao.com.hk/"
+url.dagongbao.hongkong<-"http://www.takungpao.com.hk/hongkong/"
+url.dagongbao.mainland<-"http://www.takungpao.com.hk/mainland/"
+url.dagongbao.international<-"http://www.takungpao.com.hk/international/"
+url.dagongbao.opinion<-"http://www.takungpao.com.hk/opinion/"
+url.dagongbao.finance<-"http://www.takungpao.com.hk/finance/"
+url.dagongbao.opinion<-"http://www.takungpao.com.hk/opinion/"
+url.dagongbao.culture<-"http://www.takungpao.com.hk/culture/"
+url.dagongbao.sports<-"http://www.takungpao.com.hk/sports/"
+url.dagongbao.ent<-"http://www.takungpao.com.hk/ent/"
+page.dagongbao.hongkong<-htmlTreeParse(url.dagongbao.hongkong,useInternalNodes=T)               # parse the page
+news.dagongbao.hongkong<-xpathSApply(page.dagongbao.hongkong,"//@href")                         # grep all the address on the page
+head(news.dagongbao.hongkong,45)
+tail(news.dagongbao.hongkong,4)
+news.dagongbao.hongkong<-news.dagongbao.hongkong[46:(length(news.dagongbao.hongkong)-4)]
+
+title.dagongbao.hongkong<-list()
+#content.dagongbao.hongkong[1]<-news.dagongbao.hongkong[1]
+
+#content.dagongbao.hongkong<-rbindhtmlTreeParse(news.dagongbao.hongkong[i],useInternalNodes=T)
+
+url.dagongbao<-"http://www.takungpao.com.hk/"
+url.dagongbao.hongkong<-"http://www.takungpao.com.hk/hongkong/"
+url.dagongbao.mainland<-"http://www.takungpao.com.hk/mainland/"
+url.dagongbao.international<-"http://www.takungpao.com.hk/international/"
+url.dagongbao.opinion<-"http://www.takungpao.com.hk/opinion/"
+url.dagongbao.finance<-"http://www.takungpao.com.hk/finance/"
+url.dagongbao.opinion<-"http://www.takungpao.com.hk/opinion/"
+url.dagongbao.culture<-"http://www.takungpao.com.hk/culture/"
+url.dagongbao.sports<-"http://www.takungpao.com.hk/sports/"
+url.dagongbao.ent<-"http://www.takungpao.com.hk/ent/"
+pb<-txtProgressBar(title = "progress bar", min = 0,max = length(news.dagongbao.hongkong), width = 300)
+extention.dagongbao<-c("hongkong","mainland","international","opinion","finance","culture","sports","ent")
+library(qpcR)
+for (e in extention.dagongbao) {
+  url<-paste("url.dagongbao.",e,sep="")
+  news<-paste("news.dagongbao",e,sep="")
+  cont<-paste("content.dagongbao",e,sep="")
+  page<-paste("page.dagongbao",e,sep="")
+  page<-htmlTreeParse(url,useInternalNodes=T)
+  news<-xpathSApply(page,"//@href")
+  
+
+  
+for(i in 1:length(news)){cont<-htmlTreeParse(news[i],useInternalNodes=T);title[i]<-xpathSApply(cont,"//title",xmlValue);setTxtProgressBar(pb, i, label=paste( round(i/length(news)*100, 0),"% done"));text<-plyr::cbind.fill(text,xpathSApply(ct,"//*/p",xmlValue))}
+  #title<-paste("title.dagongbao",e,sep="")
+  unique(title)
+  }
+
+news.dagongbao.hongkong<-unique(news.dagongbao.hongkong)
+text<-NULL
+title.dagongbao.hongkong<-NULL
+for(i in 1:length(news.dagongbao.hongkong)){content.dagongbao.hongkong<-htmlTreeParse(news.dagongbao.hongkong[i],useInternalNodes=T);title.dagongbao.hongkong[i]<-xpathSApply(content.dagongbao.hongkong,"//title",xmlValue);text<-qpcR:::cbind.na(text,xpathSApply(content.dagongbao.hongkong,"//*/p",xmlValue));setTxtProgressBar(pb, i, label=paste( round(i/length(news.dagongbao.hongkong)*100, 0),"% done"))}
+unique(title.dagongbao.hongkong)
+```
+
